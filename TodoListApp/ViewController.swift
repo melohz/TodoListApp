@@ -24,7 +24,11 @@ class ViewController: UIViewController {
         self.todoContentsRealm = readRealmInstance.objects(TodoModel.self)
     }
     
+    // 追加ボタンタップ
     @IBAction func tapAddButton(_ sender: Any) {
+        
+        if !isNewTodoValidated() { return }
+        
         let todoModel: TodoModel = TodoModel()
         
         todoModel.todoContent = self.todoInputText.text
@@ -35,11 +39,37 @@ class ViewController: UIViewController {
             writeRealmInstance.add(todoModel)
         }
         
+        self.todoInputText.text = ""
         self.todoListContentsTableView.reloadData()
+    }
+    
+    func isNewTodoValidated() -> Bool {
+        guard let inputText = todoInputText.text else { return false }
+        if inputText.isEmpty {
+            alertDialog(title: "Input error", message: "Todo description is empty")
+            return false
+        }
+        
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if (todoInputText.isFirstResponder) {
+            todoInputText.resignFirstResponder()
+        }
+    }
+    
+    func alertDialog(title: String, message: String) {
+        let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let defaultAction: UIAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        
+        alert.addAction(defaultAction)
+        
+        present(alert, animated: true, completion: nil)
     }
 }
 
-extension ViewController: UITableViewDataSource {
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.todoContentsRealm.count
     }
@@ -52,5 +82,35 @@ extension ViewController: UITableViewDataSource {
         cell.textLabel?.text = content.todoContent
         
         return cell
+    }
+    
+    // Tells the delegate that the specified row is now selected.
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if (todoInputText.isFirstResponder) {
+            todoInputText.resignFirstResponder()
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            
+            let deleteRealmInstance = try! Realm()
+            if let deleteTargetString = todoContentsRealm[indexPath.row].todoContent {
+                let deleteTarget = deleteRealmInstance.objects(TodoModel.self).filter("todoContent == %@", deleteTargetString)
+                try! deleteRealmInstance.write {
+                    deleteRealmInstance.delete(deleteTarget)
+                }
+                
+                tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
+            }
+            
+        } else if editingStyle == UITableViewCell.EditingStyle.insert {
+            	
+        }
     }
 }
