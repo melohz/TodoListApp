@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1120"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B1B642F5818815BEEEC26287389A34DE"
-               BuildableName = "Pods_TodoListApp.framework"
-               BlueprintName = "Pods-TodoListApp"
+               BlueprintIdentifier = "9774A60E5AA1E5E5DBFF351ED110C55F"
+               BuildableName = "RealmSwift.framework"
+               BlueprintName = "RealmSwift"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,6 +47,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "9774A60E5AA1E5E5DBFF351ED110C55F"
+            BuildableName = "RealmSwift.framework"
+            BlueprintName = "RealmSwift"
+            ReferencedContainer = "container:Pods.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
